@@ -22,6 +22,14 @@ async function fetchProfile(code: string): Promise<UserProfile> {
     return await result.json();
 }
 
+async function getTopTracks(type: string, time_range: string, limit: BigInteger, offset: BigInteger) {
+    const topTracks = await fetch('https://api.spotify.com/v1/me/top/tracks?limit=100&time_range=long_term', {
+        method: 'GET', headers: { Authorization: `Bearer ${code}` }
+    });
+
+    return await topTracks.json();
+}
+
 function populateUI(profile: UserProfile) {
     document.getElementById("displayName")!.innerText = profile.display_name;
     document.getElementById("avatar")!.setAttribute("src", profile.images[0].url)
