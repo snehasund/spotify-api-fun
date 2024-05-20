@@ -30,6 +30,14 @@ async function getTopTracks(type: string, time_range: string, limit: BigInteger,
     return await topTracks.json();
 }
 
+async function getTopArtists(type: string ,time_range: string, limit: BigInteger, offset: BigInteger) {
+    const TopArtists = await fetch('https://api.spotify.com/v1/me/top/artists?limit=100&time_range=long_term', {
+        method: 'GET', headers: { Authorization: `Bearer ${code}` }
+    });
+
+    return await TopArtists.json();
+}
+
 function populateUI(profile: UserProfile) {
     document.getElementById("displayName")!.innerText = profile.display_name;
     document.getElementById("avatar")!.setAttribute("src", profile.images[0].url)
