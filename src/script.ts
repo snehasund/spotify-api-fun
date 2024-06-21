@@ -11,7 +11,7 @@ const code = params.get("code");
         const accessToken = await getAccessToken(clientId, code);
         const profile = await fetchProfile(accessToken);
         const topArtists = await getTopArtists(accessToken);
-        populateUI(accessToken, profile, topsons.items);
+        populateUI(accessToken, profile);
     }
 })();
 
@@ -31,7 +31,7 @@ async function getTopArtists(accessToken: string) {
     return await topArtists.json();
 }
 
-function populateUI(profile: UserProfile, topsongs, topArtists: any) {
+function populateUI(profile: UserProfile, topArtists: any) {
     document.getElementById("displayName")!.innerText = profile.display_name; 
     document.getElementById("avatar")!.setAttribute("src", profile.images[0].url);
     document.getElementById("id")!.innerText = profile.id;
