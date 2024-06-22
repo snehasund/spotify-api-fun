@@ -10,7 +10,7 @@ if (!code) {
     const profile = await fetchProfile(accessToken);
     // const topArtists = await getTopArtists(accessToken);
     const topTracks = await getTopTracks(accessToken);
-    populateUI(profile, topTracks);
+    populateUI(profile);
 
     const revealTopArtistsButton = document.getElementById('revealTopArtistsButton');
     revealTopArtistsButton.addEventListener('click', async () => {
@@ -23,6 +23,16 @@ if (!code) {
         } catch (error) {
             console.error('Error:', error);
             alert('Failed to fetch top artists. Please try again.');
+        }
+    });
+    revealTopTracksButton.addEventListener('click', async () => {
+        try {
+            const topTracks = await getTopTracks(accessToken);
+            populateTopTracks(topTracks);
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to fetch top tracks. Please try again.');
         }
     });
     // Function to populate top artists
@@ -47,6 +57,16 @@ if (!code) {
 
             topArtistsContainer.appendChild(artistContainer);
             artistContainer.style.display = 'inline-block';
+        });
+    }
+    function populateTopTracks(topTracks) {
+        const trackList = document.getElementById("topTracksList");
+        trackList.innerHTML = ''; // Clear previous content
+
+        topTracks.items.forEach(track => {
+            const trackName = document.createElement('li');
+            trackName.innerText = track.name;
+            trackList.appendChild(trackName);
         });
     }
     const generateButton = document.getElementById('generatePlaylistButton');
@@ -149,7 +169,7 @@ async function getTopTracks(token: string) {
 // create new user playlist
 async function createPlaylist(token: string, user_id: string) {
     const result = await fetch(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
-        method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify({name: "snoofy the slayest evah"})
+        method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify({name: "i show this to dad"})
     });
     return await result.json();
 }
@@ -163,7 +183,7 @@ async function addTopTracks(token: string, playlist_id: string, topTracks: any) 
     return await result.json()
 }
 
-function populateUI(profile: UserProfile, topTracks : any) {
+function populateUI(profile: UserProfile) {
     document.getElementById("displayName")!.innerText = profile.display_name;
     if (profile.images[0]) {
         const profileImage = new Image(200, 200);
@@ -178,17 +198,4 @@ function populateUI(profile: UserProfile, topTracks : any) {
     document.getElementById("url")!.innerText = profile.href;
     document.getElementById("url")!.setAttribute("href", profile.href);
     document.getElementById("imgUrl")!.innerText = profile.images[0]?.url ?? '(no profile image)';
-
-
-
-    // get top tracks here (i know now)
-    // document.getElementById("topTracks")!.innerText = topTracks.items.map((i)=>i.name)
-    topTracks.items.forEach(track => {
-        const trackName = document.createElement('li');
-        trackName.innerText = track.name;
-        
-        // Append each track name as a list item to the existing ul element
-        const trackList = document.getElementById("topTracksList")!;
-        trackList.appendChild(trackName);
-    }); 
 }
