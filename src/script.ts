@@ -12,29 +12,47 @@ if (!code) {
     const topTracks = await getTopTracks(accessToken);
     populateUI(profile);
 
-    const revealTopArtistsButton = document.getElementById('revealTopArtistsButton');
-    revealTopArtistsButton.addEventListener('click', async () => {
+    const toggleTopArtistsButton = document.getElementById('toggleTopArtistsButton');
+    const toggleTopTracksButton = document.getElementById('toggleTopTracksButton');
+
+    toggleTopArtistsButton.addEventListener('click', async () => {
         try {
-            const topArtists = await getTopArtists(accessToken);
-            const topTracks = await getTopTracks(accessToken);
-
-            populateTopArtists(topArtists);
-
+            if (toggleTopArtistsButton.classList.contains('active')) {
+                // Hide top artists
+                toggleTopArtistsButton.classList.remove('active');
+                document.getElementById('topArtists').classList.add('hidden');
+            } else {
+                // Show top artists
+                toggleTopArtistsButton.classList.add('active');
+                const topArtists = await getTopArtists(accessToken);
+                populateTopArtists(topArtists);
+                document.getElementById('topArtists').classList.remove('hidden');
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('Failed to fetch top artists. Please try again.');
         }
     });
-    revealTopTracksButton.addEventListener('click', async () => {
-        try {
-            const topTracks = await getTopTracks(accessToken);
-            populateTopTracks(topTracks);
 
+    toggleTopTracksButton.addEventListener('click', async () => {
+        try {
+            if (toggleTopTracksButton.classList.contains('active')) {
+                // Hide top tracks
+                toggleTopTracksButton.classList.remove('active');
+                document.getElementById('topTracksList').classList.add('hidden');
+            } else {
+                // Show top tracks
+                toggleTopTracksButton.classList.add('active');
+                const topTracks = await getTopTracks(accessToken);
+                populateTopTracks(topTracks);
+                document.getElementById('topTracksList').classList.remove('hidden');
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('Failed to fetch top tracks. Please try again.');
         }
     });
+
     // Function to populate top artists
     function populateTopArtists(topArtists) {
         const topArtistsContainer = document.getElementById("topArtists");
@@ -59,6 +77,8 @@ if (!code) {
             artistContainer.style.display = 'inline-block';
         });
     }
+
+    // Function to populate top tracks
     function populateTopTracks(topTracks) {
         const trackList = document.getElementById("topTracksList");
         trackList.innerHTML = ''; // Clear previous content
@@ -69,6 +89,7 @@ if (!code) {
             trackList.appendChild(trackName);
         });
     }
+
     const generateButton = document.getElementById('generatePlaylistButton');
     
     generateButton.addEventListener('click', async () => {
@@ -83,6 +104,7 @@ if (!code) {
         }
     });
 }
+
 
 export async function redirectToAuthCodeFlow(clientId: string) {
     const verifier = generateCodeVerifier(128);

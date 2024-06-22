@@ -1,30 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>My Spotify Profile</title>
-        <script src="src/script.ts" type="module"></script>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-      <h1 style="padding: 10px; margin: 10px;">playing with the spotify web api :)</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>playing with the spotify web api :)</title>
+  <script src="src/script.ts" type="module"></script>
+  <style>
+    /* CSS for centering the profile section */
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0; /* Optional: Background color for the page */
+    }
 
-      <section id="profile" class="profile-card">
-        <h2>Logged in as <span id="displayName"></span></h2>
-        <span id="avatar"></span>
-        <br>
-        <div class="button-class">
-          <button id="revealTopArtistsButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Reveal Top Artists</button><br>
-          <span id="topArtists" style="margin: 10px;"></span><br>
-          <button id="revealTopTracksButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Reveal Top Tracks</button><br>
-          <span id="topTracksList" style="margin: 10px;"></span><br>
-          <button id="generatePlaylistButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Generate Playlist</button>
+    .profile-card {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+    }
+
+    #avatar {
+      width: 150px; /* Adjust size as needed */
+      height: 150px; /* Adjust size as needed */
+      border-radius: 50%; /* Makes the avatar circular */
+      overflow: hidden; /* Ensures the image stays within the circle */
+    }
+
+    /* CSS for hiding elements initially */
+    .hidden {
+      display: none;
+    }
+
+    #avatar img {
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <section id="profile" class="profile-card">
+    <h2 style="margin-right: 100px; margin-left: 100px;">Logged in as <span id="displayName"></span></h2>
+    <span id="avatar"></span>
+    <br>
+    <div class="button-class">
+      <button id="toggleTopArtistsButton" class="toggle-button" style="width: 100%; padding: 20px; background-color: lightblue; border-radius: 20px; margin-top: 20px;">Toggle Top Artists</button><br>
+      <div id="topArtists" class="hidden" style="margin: 10px;">
+        <!-- Content to reveal/hide -->
+        <ul id="topArtistsList">
+          <!-- Top artists will be dynamically added here -->
+        </ul>
       </div>
-      </section>
-    </body>
-</html>
+      <button id="toggleTopTracksButton" class="toggle-button" style="width: 100%; padding: 20px; background-color: lightblue; border-radius: 20px; margin-top: 20px;">Toggle Top Tracks</button><br>
+      <div id="topTracksList" class="hidden" style="margin: 10px;">
+        <!-- Content to reveal/hide -->
+        <ul id="topTracksListItems">
+          <!-- Top tracks will be dynamically added here -->
+        </ul>
+      </div>
+      <button id="generatePlaylistButton" style="width: 100%; padding: 20px; background-color: lightblue; border-radius: 20px; margin-top: 20px;">Generate Playlist</button>
+    </div>
+  </section>
 
- <!-- Note- We're referring directly to the TypeScript file, 
- and we're using the `type="module"` attribute. 
- Vite will transpile our TypeScript to JavaScript 
- so that it can run in the browser. -->
+</body>
+</html>
