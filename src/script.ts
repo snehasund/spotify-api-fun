@@ -8,7 +8,8 @@ if (!code) {
     const accessToken = await getAccessToken(clientId, code);
     const profile = await fetchProfile(accessToken);
     const topArtists = await getTopArtists(accessToken);
-    populateUI(profile, topArtists);
+    const topTracks = await getTopTracks(accessToken);
+    populateUI(profile, topArtists, topTracks);
     console.log(profile); // Profile data logs to console
 }
 
@@ -86,8 +87,15 @@ async function getTopArtists(token: string) {
 }
 
 // get top tracks
+async function getTopTracks(token: string) {
+    const result = await fetch("https://api.spotify.com/v1/me/top/tracks", {
+        method: "GET", headers: { Authorization: `Bearer ${token}` }
+    });
 
-function populateUI(profile: UserProfile, topArtists : any) {
+    return await result.json();
+}
+
+function populateUI(profile: UserProfile, topArtists : any, topTracks : any) {
     document.getElementById("displayName")!.innerText = profile.display_name;
     if (profile.images[0]) {
         const profileImage = new Image(200, 200);
@@ -105,4 +113,7 @@ function populateUI(profile: UserProfile, topArtists : any) {
     // get top artists here too i think
     console.log(topArtists.items)
     document.getElementById("topArtists")!.innerText = topArtists.items.map((i)=>i.name)
+
+    // get top tracks here (i know now)
+    document.getElementById("topTracks")!.innerText = topTracks.items.map((i)=>i.name)
 }
