@@ -7,17 +7,19 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-      <h1>Display your Spotify profile data</h1>
+      <h1 style="padding: 10px; margin: 10px;">playing with the spotify web api :)</h1>
 
       <section id="profile" class="profile-card">
         <h2>Logged in as <span id="displayName"></span></h2>
         <span id="avatar"></span>
         <br>
-        <button id="revealTopArtistsButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Reveal Top Artists</button><br>
-        <span id="topArtists" style="margin: 10px;"></span><br>
-        <button id="revealTopTracksButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Reveal Top Tracks</button><br>
-        <span id="topTracksList" style="margin: 10px;"></span><br>
-        <button id="generatePlaylistButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Generate Playlist</button>
+        <div class="button-class">
+          <button id="revealTopArtistsButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Reveal Top Artists</button><br>
+          <span id="topArtists" style="margin: 10px;"></span><br>
+          <button id="revealTopTracksButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Reveal Top Tracks</button><br>
+          <span id="topTracksList" style="margin: 10px;"></span><br>
+          <button id="generatePlaylistButton" style="padding: 20px; background-color: lightblue; border-radius: 20px;">Generate Playlist</button>
+      </div>
       </section>
     </body>
 </html>
