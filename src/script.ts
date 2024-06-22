@@ -113,7 +113,17 @@ function populateUI(profile: UserProfile, topArtists : any, topTracks : any) {
     // get top artists here too i think
     console.log(topArtists.items)
     document.getElementById("topArtists")!.innerText = topArtists.items.map((i)=>i.name)
+    topArtists.items.forEach(i=>{
+        const profileImage = new Image(200, 200);
+        profileImage.src = i.images[0].url;
+        document.getElementById("topArtists")!.appendChild(profileImage);
+    })
 
     // get top tracks here (i know now)
     document.getElementById("topTracks")!.innerText = topTracks.items.map((i)=>i.name)
+    topTracks.items.forEach(i=>{
+        const profileImage = new Image(200, 200);
+        profileImage.src = i.album.images[0].url;
+        document.getElementById("topTracks")!.appendChild(profileImage);
+    })
 }
