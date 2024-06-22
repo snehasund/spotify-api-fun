@@ -10,7 +10,7 @@ if (!code) {
     const topArtists = await getTopArtists(accessToken);
     const topTracks = await getTopTracks(accessToken);
     const playlistInfo = await createPlaylist(accessToken, profile.id);
-    const addedTracks = await addTracks(accessToken, playlistInfo.id, topTracks)
+    const addedTracks = await addTopTracks(accessToken, playlistInfo.id, topTracks)
     console.log(playlistInfo)
     console.log(addedTracks)
     populateUI(profile, topArtists, topTracks);
@@ -107,13 +107,17 @@ async function createPlaylist(token: string, user_id: string) {
     return await result.json();
 }
 
-async function addTracks(token: string, playlist_id: string, topTracks: any) {
+// add top tracks to playlist
+
+async function addTopTracks(token: string, playlist_id: string, topTracks: any) {
     const result = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
         method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify({playlist_id: playlist_id, uris: topTracks.items.map((i)=>i.uri)})
     });
 
     return await result.json()
 }
+
+// get Reccomendations
 
 function populateUI(profile: UserProfile, topArtists : any, topTracks : any) {
     document.getElementById("displayName")!.innerText = profile.display_name;
