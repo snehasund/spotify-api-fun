@@ -102,7 +102,7 @@ async function getTopTracks(token: string) {
 // create new user playlist
 async function createPlaylist(token: string, user_id: string) {
     const result = await fetch(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
-        method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify({name: "test1"})
+        method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify({name: "top-tracks !"})
     });
     return await result.json();
 }
