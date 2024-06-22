@@ -5,15 +5,63 @@ const code = params.get("code");
 if (!code) {
     redirectToAuthCodeFlow(clientId);
 } else {
+    // Code to get access token and fetch required data
     const accessToken = await getAccessToken(clientId, code);
     const profile = await fetchProfile(accessToken);
-    const topArtists = await getTopArtists(accessToken);
+    // const topArtists = await getTopArtists(accessToken);
     const topTracks = await getTopTracks(accessToken);
-    const playlistInfo = await createPlaylist(accessToken, profile.id);
-    console.log(playlistInfo)
-    const addedTracks = await addTopTracks(accessToken, playlistInfo.id, topTracks);
-    populateUI(profile, topArtists, topTracks);
-    console.log(profile); // Profile data logs to console
+    populateUI(profile, topTracks);
+
+    const revealTopArtistsButton = document.getElementById('revealTopArtistsButton');
+    revealTopArtistsButton.addEventListener('click', async () => {
+        try {
+            const topArtists = await getTopArtists(accessToken);
+            const topTracks = await getTopTracks(accessToken);
+
+            populateTopArtists(topArtists);
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to fetch top artists. Please try again.');
+        }
+    });
+    // Function to populate top artists
+    function populateTopArtists(topArtists) {
+        const topArtistsContainer = document.getElementById("topArtists");
+        topArtistsContainer.innerHTML = ''; // Clear previous content
+
+        topArtists.items.forEach(artist => {
+            const artistContainer = document.createElement('div');
+            artistContainer.style.textAlign = 'center';
+            artistContainer.style.marginRight = '20px';
+
+            const profileImage = new Image(200, 200);
+            profileImage.src = artist.images[0].url;
+
+            const artistName = document.createElement('span');
+            artistName.innerText = artist.name;
+            artistName.style.display = 'block';
+
+            artistContainer.appendChild(profileImage);
+            artistContainer.appendChild(artistName);
+
+            topArtistsContainer.appendChild(artistContainer);
+            artistContainer.style.display = 'inline-block';
+        });
+    }
+    const generateButton = document.getElementById('generatePlaylistButton');
+    
+    generateButton.addEventListener('click', async () => {
+        try {
+            const playlistInfo = await createPlaylist(accessToken, profile.id);
+            const addedTracks = await addTopTracks(accessToken, playlistInfo.id, topTracks);
+
+            alert('Playlist created and tracks added successfully!');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to generate playlist. Please try again.');
+        }
+    });
 }
 
 export async function redirectToAuthCodeFlow(clientId: string) {
@@ -101,7 +149,7 @@ async function getTopTracks(token: string) {
 // create new user playlist
 async function createPlaylist(token: string, user_id: string) {
     const result = await fetch(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
-        method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify({name: "top-tracks !"})
+        method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify({name: "snoofy the slayest evah"})
     });
     return await result.json();
 }
@@ -115,13 +163,14 @@ async function addTopTracks(token: string, playlist_id: string, topTracks: any) 
     return await result.json()
 }
 
-function populateUI(profile: UserProfile, topArtists : any, topTracks : any) {
+function populateUI(profile: UserProfile, topTracks : any) {
     document.getElementById("displayName")!.innerText = profile.display_name;
     if (profile.images[0]) {
         const profileImage = new Image(200, 200);
         profileImage.src = profile.images[0].url;
         document.getElementById("avatar")!.appendChild(profileImage);
     }
+
     document.getElementById("id")!.innerText = profile.id;
     document.getElementById("email")!.innerText = profile.email;
     document.getElementById("uri")!.innerText = profile.uri;
@@ -130,21 +179,16 @@ function populateUI(profile: UserProfile, topArtists : any, topTracks : any) {
     document.getElementById("url")!.setAttribute("href", profile.href);
     document.getElementById("imgUrl")!.innerText = profile.images[0]?.url ?? '(no profile image)';
 
-    // get top artists here too i think
-    console.log(topArtists.items)
-    document.getElementById("topArtists")!.innerText = topArtists.items.map((i)=>i.name)
-    topArtists.items.forEach(i=>{
-        const profileImage = new Image(200, 200);
-        profileImage.src = i.images[0].url;
-        document.getElementById("topArtists")!.appendChild(profileImage);
-    })
+
 
     // get top tracks here (i know now)
-    document.getElementById("topTracks")!.innerText = topTracks.items.map((i)=>i.name)
-    topTracks.items.forEach(i=>{
-        const profileImage = new Image(200, 200);
-        profileImage.src = i.album.images[0].url;
-        document.getElementById("topTracks")!.appendChild(profileImage);
-    })
-
+    // document.getElementById("topTracks")!.innerText = topTracks.items.map((i)=>i.name)
+    topTracks.items.forEach(track => {
+        const trackName = document.createElement('li');
+        trackName.innerText = track.name;
+        
+        // Append each track name as a list item to the existing ul element
+        const trackList = document.getElementById("topTracksList")!;
+        trackList.appendChild(trackName);
+    }); 
 }

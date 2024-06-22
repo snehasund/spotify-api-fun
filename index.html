@@ -4,22 +4,31 @@
         <meta charset="utf-8">
         <title>My Spotify Profile</title>
         <script src="src/script.ts" type="module"></script>
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body>
       <h1>Display your Spotify profile data</h1>
 
-      <section id="profile">
-      <h2>Logged in as <span id="displayName"></span></h2>
-      <span id="avatar"></span>
-      <ul>
-          <li>User ID: <span id="id"></span></li>
-          <li>Email: <span id="email"></span></li>
-          <li>Spotify URI: <a id="uri" href="#"></a></li>
-          <li>Link: <a id="url" href="#"></a></li>
-          <li>Profile Image: <span id="imgUrl"></span></li>
-          <li>Top Artists: <span id="topArtists"></span></li>
-          <li>Top Tracks: <span id="topTracks"></span></li>
-      </ul>
+      <section id="profile" class="profile-card">
+        <h2>Logged in as <span id="displayName"></span></h2>
+        <span id="avatar"></span>
+        <li>User ID: <span id="id"></span></li>
+        <li>Email: <span id="email"></span></li>
+        <li>Spotify URI: <a id="uri" href="#"></a></li>
+        <li>Link: <a id="url" href="#"></a></li>
+        <li>Profile Image: <span id="imgUrl"></span></li>
+        <a>Top Artists:</a>
+        <br>
+        <button id="revealTopArtistsButton">Reveal Top Artists</button>
+        <span id="topArtists"></span>
+        <br>
+        <div class="top-tracks" style="display: flex; background-color: lightblue; border: 10px; border-color: black; align-items: center;">
+            <a>Top Tracks: </a>
+            <ul id="topTracksList">
+                <!-- List items for top tracks will be dynamically added here -->
+            </ul>
+        </div>
+        <button id="generatePlaylistButton">Generate Playlist</button>
       </section>
     </body>
 </html>
