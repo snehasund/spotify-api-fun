@@ -9,6 +9,8 @@ if (!code) {
     const profile = await fetchProfile(accessToken);
     const topArtists = await getTopArtists(accessToken);
     const topTracks = await getTopTracks(accessToken);
+    const playlistInfo = await createPlaylist(accessToken, profile.id);
+    console.log(playlistInfo)
     populateUI(profile, topArtists, topTracks);
     console.log(profile); // Profile data logs to console
 }
@@ -23,7 +25,7 @@ export async function redirectToAuthCodeFlow(clientId: string) {
     params.append("client_id", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:5173/callback");
-    params.append("scope", "user-read-private user-read-email user-top-read");
+    params.append("scope", "user-read-private user-read-email user-top-read playlist-modify-public playlist-modify-private");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 
@@ -95,6 +97,15 @@ async function getTopTracks(token: string) {
     return await result.json();
 }
 
+// create new user playlist
+async function createPlaylist(token: string, user_id: string) {
+    const result = await fetch(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify({name: "LOOOOOOOOOFY"})
+    });
+
+    return await result.json();
+}
+
 function populateUI(profile: UserProfile, topArtists : any, topTracks : any) {
     document.getElementById("displayName")!.innerText = profile.display_name;
     if (profile.images[0]) {
@@ -126,4 +137,5 @@ function populateUI(profile: UserProfile, topArtists : any, topTracks : any) {
         profileImage.src = i.album.images[0].url;
         document.getElementById("topTracks")!.appendChild(profileImage);
     })
+
 }
